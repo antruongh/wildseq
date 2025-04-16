@@ -1,0 +1,56 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: clust1-headnode-1.cri.camres.org
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 20
+Rules claiming more threads will be scaled down.
+Job stats:
+job                 count
+----------------  -------
+cellranger_count        1
+total                   1
+
+Select jobs to execute...
+Execute 1 jobs...
+[Wed Apr 16 19:39:53 2025]
+localrule cellranger_count:
+    input: /mnt/scratcha/jblab/middle01/singlecell_seq2/SLX-25124
+    output: /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/filtered_feature_bc_matrix.h5, /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/possorted_genome_bam.bam
+    jobid: 0
+    reason: Missing output files: /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/filtered_feature_bc_matrix.h5
+    wildcards: sample_index=SITTA6
+    resources: tmpdir=/tmp
+
+Waiting for more resources.
+RuleException:
+CalledProcessError in file "/mnt/scratcha/jblab/truong01/wildseq/snakemake/wildseq_alignment/rules/cellranger_count.smk", line 15:
+Command 'set -euo pipefail;  
+        cellranger count --id=SITTA6                          --transcriptome=/mnt/scratcha/jblab/middle01/singlecell_seq2/Homo_sapiens_GRCh38_WILDseq_tdTom_WILDseq                          --fastqs=/mnt/scratcha/jblab/middle01/singlecell_seq2/SLX-25124                          --sample=SITTA6                          --localcores=20                          --localmem=100' returned non-zero exit status 2.
+[Wed Apr 16 19:39:53 2025]
+Error in rule cellranger_count:
+    message: None
+    jobid: 0
+    input: /mnt/scratcha/jblab/middle01/singlecell_seq2/SLX-25124
+    output: /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/filtered_feature_bc_matrix.h5, /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/possorted_genome_bam.bam
+    shell:
+        
+        cellranger count --id=SITTA6                          --transcriptome=/mnt/scratcha/jblab/middle01/singlecell_seq2/Homo_sapiens_GRCh38_WILDseq_tdTom_WILDseq                          --fastqs=/mnt/scratcha/jblab/middle01/singlecell_seq2/SLX-25124                          --sample=SITTA6                          --localcores=20                          --localmem=100
+        
+        (command exited with non-zero exit code)
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look below for error messages
+[Wed Apr 16 19:39:53 2025]
+Error in rule cellranger_count:
+    message: None
+    jobid: 0
+    input: /mnt/scratcha/jblab/middle01/singlecell_seq2/SLX-25124
+    output: /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/filtered_feature_bc_matrix.h5, /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/possorted_genome_bam.bam
+    shell:
+        
+        cellranger count --id=SITTA6                          --transcriptome=/mnt/scratcha/jblab/middle01/singlecell_seq2/Homo_sapiens_GRCh38_WILDseq_tdTom_WILDseq                          --fastqs=/mnt/scratcha/jblab/middle01/singlecell_seq2/SLX-25124                          --sample=SITTA6                          --localcores=20                          --localmem=100
+        
+        (command exited with non-zero exit code)
+Complete log(s): /mnt/scratcha/jblab/truong01/wildseq/snakemake/wildseq_alignment/.snakemake/log/2025-04-16T193953.180127.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

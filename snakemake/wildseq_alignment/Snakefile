@@ -1,0 +1,36 @@
+from os.path import join
+from itertools import chain
+import os
+import pandas as pd 
+
+configfile: "/mnt/scratcha/jblab/truong01/wildseq/snakemake/wildseq_alignment/config.yaml"
+
+SLX_ID = config["SLX_ID"]
+FASTQ_DIR = f'{config["FASTQ_DIR"]}/{SLX_ID}'
+
+# get samples
+#SAMPLES_INDEX = glob_wildcards(f"{FASTQ_DIR}/{{sample_index}}_R1_001.fastq.gz").sample_index
+
+# load metadata file to match enrich index
+sample_metadata_file = config["sample_metadata"]
+sample_metadata = pd.read_csv(sample_metadata_file).set_index("sample_index")
+
+SAMPLES_INDEX = sample_metadata.index.tolist()
+
+sample_map = dict(zip(sample_metadata.index, sample_metadata["enrich_index"]))
+config["sample_map"] = sample_map
+
+# Rules -----------------------------------------------------------------------
+
+include: "rules/cellranger_count.smk"
+include: "rules/barcode_extraction_10X_tdTom.smk"
+include: "rules/barcode_umi_match.smk"
+include: "rules/enrich_pcr.smk"
+include: "rules/barcode_assignment.smk"
+
+
+rule all:
+    input:
+        expand(f'{config["OUT_DIR"]}/{SLX_ID}/{{sample_index}}/outs/barcode_assignment_{SLX_ID}_{{sample_index}}.txt',
+               sample_index=SAMPLES_INDEX)
+

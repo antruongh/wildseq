@@ -1,0 +1,20 @@
+channels:
+  - conda-forge
+  - bioconda
+  - r
+  - defaults
+
+dependencies:
+  - snakemake
+  - cellranger
+  - umi-tools
+  - r=4.1.0
+  - r-base
+  - r-argparse
+  - bioconductor-rsubread
+  - r-tidyverse
+  - r-data.table
+  - r-devtools
+  - r-seurat
+
+channel_priority: true

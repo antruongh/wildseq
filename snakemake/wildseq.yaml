@@ -1,0 +1,20 @@
+name: wildseq_env
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+
+dependencies:
+  - python=3.8
+  - snakemake
+  - umi-tools
+  - r=4.1.0
+  - r-base
+  - r-argparse
+  - bioconductor-rsubread
+  - r-tidyverse
+  - r-data.table
+  - r-devtools
+  - r-seurat
+

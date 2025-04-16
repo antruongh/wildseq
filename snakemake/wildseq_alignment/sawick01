@@ -1,0 +1,82 @@
+# Convert file names
+
+## convert files names from CI SLX ID structure to cellranger file name structure (same as bcl2fastq output)
+python3 /scratcha/imaxt/sawick01/crukci_to_illumina.py .
+
+# Make a custome reference library for human genome + WILDseq barcodes
+
+## custom reference genome with wildseq added
+## requires input:
+## 1. genome ref fasta:  Homo_sapiens.GRCh38.dna.primary_assembly.fa
+## 2. gene annotation gtf: Homo_sapiens.GRCh38.112.gtf
+## 3. WILDseq sequence fa: EF1a_tdTomato_WILDseq.fa
+
+## steps:
+## 1. acquire genome ref fasta
+## 2. acquire genome annotation gtf
+## 3. filter genome annotation gtf for protein coding genes only
+## 4. acquire WILDseq sequence ref fasta (whole WILDseq plasmid vector sequence) from sawick01
+## 5. create the WILDseq annotation gtf
+## 6. append the WILDseq sequence ref to genome ref (fasta)
+## 7. append the WILDseq annotation to genome ref (gtf)
+## 8. make a custom reference directory for WILDseq genome ref (cellranger mkref)
+
+## 1. download the genome fasta file
+wget https://ftp.ensembl.org/pub/release-112/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+gunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+
+## 2. download the annotation file
+wget https://ftp.ensembl.org/pub/release-112/gtf/homo_sapiens/Homo_sapiens.GRCh38.112.gtf.gz
+gunzip Homo_sapiens.GRCh38.112.gtf.gz
+
+## 3. filter the annotation gtf for only protein coding genes
+cellranger mkgtf \
+  Homo_sapiens.GRCh38.112.gtf \ ## input
+  Homo_sapiens.GRCh38.112.filtered.gtf \ ## output
+  --attribute=gene_biotype:protein_coding
+
+
+## 5. create the WILDseq annotation gtf
+echo -e 'EF1a_tdTomato_WILDseq\thavana\texon\t5266\t6919\t.\t-\t.\tgene_id "WILDseq_transcript"; transcript_id "WILDseq"; gene_name "WILDseq"; gene_biotype "barcode";' > WILDseq.gtf
+
+## 6. append the WILDseq sequence ref (the whole WILDseq plasmid vector) to the genome fa
+cat Homo_sapiens.GRCh38.dna.primary_assembly.fa EF1a_tdTomato_WILDseq.fa >
+Homo_sapiens.GRCh38_WILDseq_tdTom.fa
+
+## 7. append the WILDseq annotation gtf to the genome annotation gtf
+cat Homo_sapiens.GRCh38.112.filtered.gtf WILDseq.gtf > Homo_sapiens.GRCh38.112.filtered.WILDseq.gtf
+
+## check the gtf file that WILDseq gtf is added
+tail Homo_sapiens.GRCh38.112.filtered.WILDseq.gtf
+
+
+## 8. make custom WILDseq reference directory
+cellranger mkref --genome=Homo_sapiens_GRCh38_WILDseq_tdTom \
+  --fasta = Homo_sapiens.GRCh38_WILDseq_tdTom.fa \
+  --genes = Homo_sapiens.GRCh38.112.filtered.WILDseq.gtf
+
+## This should output a custom ref directory called Homo_sapiens_GRCh38_WILDseq_tdTom/
+
+# Alignment (cellranger count)
+
+## base function:
+
+cellranger count --id={OUTPUT_SAMPLE_NAME} \
+                 --transcriptome={DIRECTORY_WITH_REFERENCE} \
+                 --fastqs={DIRECTORY_WITH_FASTQ_FILES} \
+                 --sample={NAME_OF_SAMPLE_IN_FASTQ_FILES} \
+                 --localcores={NUMBER_OF_CPUS} \
+                 --localmem={RAM_MEMORY}
+
+## WILDseq
+
+cellranger count --id={SAMPLE} \
+                 --transcriptome=Homo_sapiens_GRCh38_WILDseq_tdTom_WILDseq/ \
+                 --fastqs={DATADIR} \
+                 --sample={SAMPLE} \
+                 --localcores=20 \
+                 --localmem=100
+
+## submit this to the cluster in a .sh file or in Snakemake
+
+# extract WILDseq reads and align to barcoded

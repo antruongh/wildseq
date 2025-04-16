@@ -1,0 +1,8 @@
+#! /bin/bash
+#SBATCH -J wildseq_ciov3
+#SBATCH -N 1
+#SBATCH -n 20
+#SBATCH --mem 128G
+#SBATCH -t 0-200:00
+
+snakemake -s /mnt/scratcha/jblab/truong01/wildseq/snakemake/wildseq_alignment/Snakefile --rerun-incomplete 

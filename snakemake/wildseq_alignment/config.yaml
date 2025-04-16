@@ -1,0 +1,4 @@
+SLX_ID: SLX-25124
+FASTQ_DIR: /mnt/scratcha/jblab/middle01/singlecell_seq2
+OUT_DIR: /mnt/scratcha/jblab/truong01/wildseq/results
+sample_metadata: /mnt/scratcha/jblab/truong01/wildseq/snakemake/wildseq_alignment/metadata/sample_metadata_SLX-25124.csv

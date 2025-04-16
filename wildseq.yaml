@@ -1,0 +1,19 @@
+name: wildseq
+
+channels:
+  - conda-forge
+  - bioconda
+  - r
+  - defaults
+
+dependencies:
+  - snakemake
+  - umi_tools
+  - r
+  - r-base
+  - r-argparse
+  - bioconductor-rsubread
+  - r-tidyverse
+  - r-data.table
+  - r-devtools
+  - r-seurat

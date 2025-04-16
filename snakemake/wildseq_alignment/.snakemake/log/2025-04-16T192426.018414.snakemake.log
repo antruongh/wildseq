@@ -1,0 +1,10 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: clust1-node-2.cri.camres.org
+Building DAG of jobs...
+MissingInputException in rule barcode_assignment in file "/mnt/scratcha/jblab/truong01/wildseq/snakemake/wildseq_alignment/rules/barcode_assignment.smk", line 7:
+Missing input files for rule barcode_assignment:
+    output: /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/barcode_assignment_SLX-25124_SITTA6.txt
+    wildcards: sample_index=SITTA6
+    affected files:
+        /mnt/scratcha/jblab/truong01/wildseq/results/SLX-25124/SITTA6/outs/EnrichPCR_table_full_filtered.txt
